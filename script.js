@@ -20,6 +20,14 @@ document.addEventListener("keydown", (e) => {
     is_paused = !is_paused;
     requestAnimationFrame(animate);
   }
+  if (e.isComposing || e.code == "KeyF") {
+    canvas.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+  }
+})
+
+document.addEventListener("resize", function(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 })
 
 class Particle {
