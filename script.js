@@ -7,6 +7,15 @@ canvas.height = window.innerHeight;
 ctx.fillStyle = 'white';
 ctx.strokeStyle = 'white';
 
+let is_colored = false;
+
+document.addEventListener("keydown", (e) => {
+  if (e.isComposing || e.code == "KeyC") {
+    is_colored = !is_colored;
+    console.log(is_colored);
+  }
+})
+
 class Particle {
   constructor(effect) {
     this.effect = effect; 
@@ -73,7 +82,11 @@ class Effect {
           this.particles[b].connections++;
           const opacity = 1 - (distance / max_distance);
           context.globalAlpha = opacity;
-          context.strokeStyle = 'hsl(' + this.particles[a].hue + ', 100%, 50%)';
+          if (is_colored) {
+            context.strokeStyle = 'hsl(' + this.particles[a].hue + ', 100%, 50%)';
+          } else {
+            context.strokeStyle = 'white'
+          }
           context.beginPath();
           context.moveTo(this.particles[a].x, this.particles[a].y);
           context.lineTo(this.particles[b].x, this.particles[b].y);
