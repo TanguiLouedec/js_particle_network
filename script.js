@@ -7,12 +7,18 @@ canvas.height = window.innerHeight;
 ctx.fillStyle = 'white';
 ctx.strokeStyle = 'white';
 
+let is_paused = false;
 let is_colored = false;
 
 document.addEventListener("keydown", (e) => {
   if (e.isComposing || e.code == "KeyC") {
     is_colored = !is_colored;
-    console.log(is_colored);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    effect.handle_particles(ctx, false);
+  }
+  if (e.isComposing || e.code == "KeyP") {
+    is_paused = !is_paused;
+    requestAnimationFrame(animate);
   }
 })
 
@@ -48,7 +54,7 @@ class Effect {
     this.width = this.canvas.width;
     this.height = this.canvas.height;
     this.particles = [];
-    this.number_of_particles = 500; 
+    this.number_of_particles = 200; 
     this.create_particles();
   }
   create_particles() {
@@ -56,11 +62,13 @@ class Effect {
       this.particles.push(new Particle(this)) 
     }
   }
-  handle_particles(context) {
+  handle_particles(context, is_moving) {
     let max_connections = 0;
     this.particles.forEach(particle => {
       particle.connections = 0;
-      particle.update();
+      if (is_moving) {
+        particle.update();
+      }
     })
     this.connect_particles(context);
     this.particles.forEach(particle => {
@@ -101,7 +109,9 @@ const effect = new Effect(canvas);
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  effect.handle_particles(ctx);
-  requestAnimationFrame(animate);
+  effect.handle_particles(ctx, true);
+  if (!is_paused) {
+    requestAnimationFrame(animate);
+  }
 }
 animate();
