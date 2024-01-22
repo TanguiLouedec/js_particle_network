@@ -25,10 +25,22 @@ document.addEventListener("keydown", (e) => {
   }
 })
 
-document.addEventListener("resize", function(){
+function handle_window_resize() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-})
+  effect.width = canvas.width;
+  effect.height = canvas.height;
+  effect.particles.forEach(particle => {
+    if (particle.x > effect.width) {
+      particle.x = effect.width - particle.radius;
+    }
+    if (particle.y > effect.height) {
+      particle.y = effect.height - particle.radius;
+    }
+  })
+}
+
+window.onresize = handle_window_resize;
 
 class Particle {
   constructor(effect) {
@@ -123,3 +135,4 @@ function animate() {
   }
 }
 animate();
+
