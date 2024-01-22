@@ -38,6 +38,8 @@ function handle_window_resize() {
       particle.y = effect.height - particle.radius;
     }
   })
+  ctx.fillStyle = 'white';
+  ctx.strokeStyle = 'white';
 }
 
 window.onresize = handle_window_resize;
